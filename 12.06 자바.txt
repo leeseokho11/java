@@ -1,0 +1,79 @@
+12.06 자바
+
+**게시판2 페이지 - 각 만들어진 클래스,인터페이스,xml이 어떤역할을 하는지 공부! **
+board2Controller(클래스) , -> 컨트롤러를 통해 삭제(delete),수정(update) , 이동등 페이지이동을 할 수 잇게함
+board2DTO(클래스), -> DB에 있는 정보 / 가져올 항목을 준비
+board2Mapper(인터페이스), 
+board2Service(인터페이스), 
+board2ServiceImpl(클래스), //자바 -> 
+
+mapper-board2.xml  //xml -> 
+
+
+1. common.html 에서 <li> 게시판2 의
+a 태그에  /board2/list 넣어주기 (이동할 페이지)
+
+2. templates 안에 이전에 만들어놓은 board(전체)를 복붙 하고 board2로 만들어준다. 
+
+3. board2 라는 컨트롤러를 the.controller 패키지안에 클래스로 만들어준다.
+->  1.Board2Service service=new Board2ServiceImpl(); 
+      2.Board2Service -> 인터페이스로 만듬 / Board2ServiceImpl() -> 클래스로 만듬!
+
+만들고 
+@Autowired
+private Board2Service service; 로 수정
+
+그 다음 
+@GetMapping("/board2/list")
+	public String list(Model model) {
+		service.getBoard2ListAll(model);
+		return "/board2/list";
+	}
+
+model 을 이용해 데이터 이동? (개념다시 확인)
+
+4. 그다음 
+
+board2ServiceImpl 에서 빨간줄이 나오면 눌러서 
+첫번째 오버라이드를 해준다. 
+
+
+
+spring 프로젝트만들때 // 
+1. lombok
+2. mybatis framework
+3. oracle driver
+4. spring boot devtools
+5. spring configuration proce
+6. spring data jpa
+7. spring web
+8. thymeleaf
+
+	
+///////////////////////////////////////////////////////////////////
+12.09
+
+자바 람다식 표현 (오전)
+
+///////////////////////////////////////////////////////////////////
+12.13 
+1.자바를 이용해 db 정보를 developer에 입력함.
+2. 회원가입, 로그인, 로그아웃 을 표현
+
+** 복습하기 ** 
+zip 파일 import 해서 복습!
+
+///////////////////////////////////////////////////////////////////
+
+12.14 
+JPA 수업
+
+집 노트북
+(https://ddolcat.tistory.com/517) 이클립스 자동완성 기능
+(https://blog.naver.com/PostView.nhn?blogId=2zino&logNo=221448292975) 이클립스 자동완성 느림,멈춤현상
+
+1. entity 폴더에서 클래스를 하나 만든후, 여기서 DB 시퀀스, 테이블을 만든다.
+2.나뭇잎모양 application 에서 
+##JPA 기본설정
+spring.jpa.generate-ddl=false // DB 를 만들려면 true 로 바꾸고 run실행 후  console 에서 만들어지면 다시 false로 바꾼다
+
