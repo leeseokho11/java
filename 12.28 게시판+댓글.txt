@@ -1,0 +1,32 @@
+aws - 데이터베이스
+유저네임: root
+비밀번호: xlajsl123
+
+
+
+https://dev.mysql.com/downloads/workbench/
+
+오라클 mysql 워크벤처 다운
+
+///////
+12.30
+
+
+깃허브 비번 // 한달주기
+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
+
+**깃->이클립스 임포트**
+
+1. 코드 복사 / 
+이클립스에서 window -> showView -> other -> git Repositories  
+
+2. 
+콘솔창 옆에
+git Repositories 에 생성되면
+clone -> 코드복사 자동으로됨
+next -> next-> Directory 경로를 e드라이브/ web 으로설정했음(노트북은 내가보기편한데)->
+finish 
+
+3.파일 메뉴 눌러서 임포트->  Gradle -> Existing Gradle Project 
+next -> next -> 저장된 폴더 위치 지정후(Directory 경로) 
+finish 하면 프로젝트가 정상적으로 임포트(이미 이름있는 프로젝트있으면 x표나옴) 
