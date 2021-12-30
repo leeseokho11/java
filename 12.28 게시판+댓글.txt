@@ -1,9 +1,0 @@
-aws - 데이터베이스
-유저네임: root
-비밀번호: xlajsl123
-
-
-
-https://dev.mysql.com/downloads/workbench/
-
-오라클 mysql 워크벤처 다운
