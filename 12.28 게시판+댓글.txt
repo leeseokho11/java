@@ -12,8 +12,8 @@ https://dev.mysql.com/downloads/workbench/
 12.30
 
 
-깃허브 비번 // 한달주기
-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
+깃허브 비번 //한ㄷㄹ
+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
 
 **깃->이클립스 임포트**
 
