@@ -1,0 +1,30 @@
+
+
+sts(spring FrameWork) 개발환경
+
+JDBC8.jar 파일
+tomcat 9.0 서버
+javafx-sdk- 17.0.0.1 
+
+mybati
+lombok
+
+
+01.10 자바
+
+로그인화면 구현(NcsTest14)
+git에서 ncsTest13으로 가져와서 세팅.gradle 에서 이름을 14로 바꾸고
+Refresh grade 해서 변경해줌.
+
+1. NcsTest14ApplicationTests -> 테스트
+작성
+
+2. LogController 에서 @PostMapping("/login/proc") -> login.html에서 써논 경로
+로그인기능 구현
+
+2. MyUserDetailsService 클래스생성
+implements UserDetailsService 이후 오버라이드
+
+
+다이소 - 형광등, 계량컵
+
