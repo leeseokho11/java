@@ -1,0 +1,77 @@
+Entity, dto 알기
+https://velog.io/@gillog/Entity-DTO-VO-%EB%B0%94%EB%A1%9C-%EC%95%8C%EA%B8%B0
+Controller, Service 이해하기
+https://frtt0608.tistory.com/7
+Service 와 ServiceImpl 이해하기 (mvc 패턴)
+https://elvis-note.tistory.com/entry/9-Spring-MVC-2-Service%EC%99%80-ServiceImpl
+
+회원가입 기능구현
+
+클라이언트(사용자요청)-> 회원가입페이지로 이동 -> 회원가입페이지에서 입력된 사용자 정보 저장 -> 로그인페이지 이동
+
+templates -> layout 
+1. 홈페이지(layout1.html)에서 회원가입으로 이동하는 경로설정(<a href="/log/signup">). 
+2. 회원가입 페이지(signip.html) 을 만든다.
+
+controller - LogController
+//회원가입페이지 이동//
+
+controller 는 사용자의 요청(request)을 어떻게 처리할지 결정하는 파트.
+컨트롤러에 정의된 기준대로 사용자요청을 처리한다. 
+  
+3. LogController 클래스에서 회원가입 페이지 이동, 회원가입처리 하는
+메서드를 만든다. 
+@Controller 의 역할을 수행한다고 명시해주는 어노테이션을 입력해준다.
+
+4. 정보를 가져오기위한 기능으로 @GetMapping("어디서 가져올지, 경로") 을 사용.
+회원가입 페이지 이동을위한 메서드 public String singupPage() 를 만든다.
+
+사용자에게 회원가입페이지를 보여주기위한 return -> "signup.html" 경로설정.
+///// 그러면 홈에서 회원가입 클릭시 회원가입 페이지로 이동을 한다. 
+
+
+//회원가입처리//
+5. 이어서 LogController 클래스에서 회원가입 처리를 할 수 있는 기능을 구현한다. 
+
+데이터를 제출,수정 처리하기위해 데이터 전송방식 @PostMapping("경로")을 사용
+
+
+6.public String singup() 회원가입 처리 메서드를 만든다.
+
+7. 기능이 끝난 후  사용자에게 로그인페이지를 보여줘야하기때문에 
+리턴 경로를 login.html 로 설정
+(return "/log/login";   -> 처리후 로그인페이지로 이동)
+
+8. 사용자가 입력한 정보(회원가입에 필요한 email, password, name 등)
+를 DB에 저장, 저장된 정보를 DB에서 가져오기 위한 객체가 필요함.
+
+9. 데이터 전송을 위한 Dto 클래스가 있어야 하기 때문에 Dto 클래스를 만들어준다.
+
+10. MemberSaveDto 클래스에서  DB에서 가져올 정보(email, password, name )을 
+클래스에 정의.
+단순 데이터를 가져올것으므로 @Data 어노테이션 입력 
+
+11. 컨트롤러가 받은 요청에 대해 알맞게 정보를 가공해 다시 컨트롤러에 데이터를
+넘기기 위한 service 클래스를 만들어 사용한다. 
+비즈니스 로직을 수행하기 위해 service, serviceimpl 를 함께 만들어준다.
+
+
+
+9. 다시 LogController 클래스에서 저장을 할 수 있게 기능을 해줄 
+service 를 위에 정의한다. 
+
+SignUpService signService = new SignUpServiceImpl(); 
+
+impl 는 클래스로 만들고 저장, SignUpService 는 인터페이스로 만들고 저장.
+impl 클래스는 -> 오버라이드 이후 저장
+
+10. SignUpService signService; 으로 줄이고 앞에 final 사용시 @RequiredArgsConstructor
+을 사용.
+
+11. 회원가입 메서드 안에 signService.save(dto); -> 사용자에게 입력받을 정보를 저장.
+
+12. 사용자에게 정보를 받고 끝나면 다시돌아갈 페이지 설정. 
+return "/log/login";   -> 처리후 로그인페이지로 이동
+
+service - impl
+impl 클래스에서 기능구현 
