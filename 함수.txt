@@ -1,0 +1,16 @@
+	<script type="text/javascript">
+								$(function(){
+									//수정하기 버튼이 클릭되었을때 실행
+									$("#btn-update").click(function(){
+										$("#detail").hide();
+										$("#edit").show();
+									});
+									
+									//취소버튼 클릭시
+									$("#btn-cancel").click(function(){
+										$("#detail").show();
+										$("#edit").hide();
+									});
+									
+								});
+							</script>
