@@ -1,0 +1,42 @@
+jpa - 데이터베이스  
+쿼리메서드
+하이버네이트란?
+
+jpa 장점?
+jpa 란? - orm 기술(object relational mapping) 
+여러 데이터베이스 (dbms) 는 오라클, 마리아, Mysql 
+차이점들이 있기 때문에 
+새로 만들 필요없이(수정없이) 사용할 수 있기 때문에
+jpa를 사용한다. 
+유지보수에 용이한다.
+
+object relational mapping - 객체관계 매핑
+jdbc 
+
+oop 란?
+객체지향프로그래밍 - 객체의 관점에서 프로그래밍하는 것을 의미한다.
+/ 유기적인 관계(순차적으로 코딩을 하는것이 아닌, )를 통해서 프로세스가 진행가능함
+object oriented programming
+
+(참고)
+https://limkydev.tistory.com/30
+
+관계형데이터베이스?
+데이터베이스도 여러 종류가 있다.
+그중 관계형 데이터베이스(key and value)
+
+빌드관리도구 maven 과 gradle 
+-> 프로젝트 설정 
+pom.xml = 메이븐 / build.gradle = gradle
+
+빌드관리도구란? 
+
+컴파일과 빌드란?
+컴파일 - 번역만 해줌
+빌드 - 컴파일 링크 까지 총 묶음
+
+spring security
+- 인증, 보안
+
+sql 자격검정 실전문제
+
