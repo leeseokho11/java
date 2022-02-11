@@ -37,6 +37,20 @@ pom.xml = 메이븐 / build.gradle = gradle
 
 spring security
 - 인증, 보안
+세션과 쿠키란?
+
+동기화, 비동기화 기능
+동기화 - 스레드
+
+웹호스팅이란?
+
+동적서버, 
+
+
+laaS, PaaS, SaaS 란? 비교
+laaS 란?
+
+aws ec2 가 laaS 에 해당!
 
 sql 자격검정 실전문제
 
