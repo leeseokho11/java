@@ -1,0 +1,312 @@
+--관계형 데이터베이스 : 중복을 최소화, 데이터의 일관성유지 위해 정규화 테이블을 분할 시켜놓은게 일반적
+-- 분할되어 있는 테이블을 병합해서 결과를 얻어와야 원하는 결과를 얻을 수 있다.
+-- 여러 테이블에서 검색을 하기위한 방법 : join, 서브쿼리, 집합연산
+--join
+--내부조인, 외부조인
+--내부조인
+--교차조인(cross join:카티션곱)
+--두테이 블의 행개수의 곱 결과가 나온다
+select employee_id, email,department_name
+from employees e, departments d;
+
+--테이블 이름을 대신하는 별며을 사용가능
+--테이블 명 뒤 공백을 두고 별명 만들면 된다.
+--30자까지 가능,짧게쓰는 목적이니깐 최대한 짧게 만든는걸 추천
+--해당하는 sql 문장에서만 유효
+
+--일반적인 조인
+--동등 조인(equi join)
+--두 테이블에서 공통컬럼을 '='비교를 통해서 같은 값을 갖는 행끼리 조인하는 방법
+--가장 많이 사용하는 조인 방법
+
+select employee_id, email,department_name
+from employees e, departments d
+where e.department_id=d.department_id;
+---------------------------------------------------------
+select employee_id, email,department_name
+from employees , departments  --별칭 없을때
+where employees.department_id = departments.department_id;
+--별칭이 없으면 department_id 구분하기위해 테이블명.공통컬럼명
+
+
+select employee_id, email,department_name, employees.department_id 
+from employees e , departments d --별칭 적용되었을경우
+where e.department_id = d.department_id;
+--별칠을 사용해서 조건문을 사용
+--DEPARTMENTS"."DEPARTMENT_ID": 부적합한 식별자
+-- from 절에서 조인관계 형성시 별칭을 적용했느냐, 하지 않았느냐에 따라 
+-- 해당 테이블의 컬럼에 접근시 별칭이 적용되었을 경우는 무조건 별칭으로 접근해야한다.
+--별칭을 적용한 테이블은 해당테이블의 컬럼에 접근시 별칭으로만 접근해야한다.
+
+--자연조인(natural join)
+--두 테이블에서 동일한 컬럼명 모두 동등조인을 처리한 결과로 조인하는 방법
+--테이블 사이에 natural join 키워드 명시
+--별칭 사용 안됨.동일한 컬럼명 적용시에도 테이블로 구분할 필요가 없다.
+
+select employee_id, email,department_name, department_id 
+from employees NATURAL JOIN departments
+WHERE department_id=80
+order by 1;
+-- employees과 departments 같은 컬럼
+-- department_id, MANAGER_ID
+
+select employee_id, email,department_name, e.department_id 
+from employees e , departments d 
+where e.department_id = d.department_id 
+and e.MANAGER_ID= d.MANAGER_ID;
+------------------------------------------------------
+--JOIN~USING : EQUI JOIN의 또다른 표현식
+--USING(컬럼명) : 조인 대상 컬럼을  USING괄호안에 표현
+--두 테이블에 동일한 이름으로 정의되어야 한다.
+--USING적용된 컬럼명은 식별자.컬럼명으로 접근하면 오류: 식별자(테이블명 OR 별명)
+select E.employee_id, email,department_name, department_id 
+from employees E JOIN departments USING(department_id)
+--WHERE employee_id=100 -- USING적용했을 시 WHERE조건절 적용가능 
+ORDER BY 1;
+--WHERE department_id=80
+-----------------------------------------------------------------------
+-----------------------------------------------------------------------
+--outer join 외부조인
+--동등 조인 조건에서 양쪽 컬럼 값중, 어느 하나라도 null이면 '=' equal연산결과가 false
+--null에 해당하는 조건은 result table에 포함되지 않는다.
+--null이지만 출력할 필요가 있을때 Outer join사용
+--WHERE절에서 outer join연자자인 (+)를 사용
+--조인 조건문에서 NULL이 출력되는 테이블 컬럼쪽에 (+)기호 표현
+
+------------제약사항
+--OUTER JOIN 연산자(+)는 NULL이 존재하는 칼럼쪽에 표시
+--OUTER JOIN에서는 IN 연산자를 사용 불가
+--다른 조건과 OR 연산자로 결합 불가
+--종류
+--LEFT|RIGHT|FULL OUTER JOIN
+
+--ANSI 문법
+--LEFT OUTER JOIN
+--두 테이블 사이에 LEFT OUTER JOIN 키워드 명시
+--컬럼조건은 ON절에서 조건문 적용
+--왼쪽 기준 요소는 모두 출력이되고 오른쪽 테이블에 컬럼에는 NUll 출력
+select e.employee_id,e.email, d.department_name, d.department_id 
+from employees e  LEFT OUTER JOIN departments d
+ON e.department_id= d.department_id
+ORDER BY 1;
+
+--ORACLE 문법
+--오른쪽 컬럼(+)
+select employee_id, email,department_name, d.department_id 
+from employees e,departments d
+WHERE e.department_id= d.department_id(+)
+ORDER BY 1;
+
+--ANSI 문법
+--RIGHT OUTER JOIN
+--두 테이블 사이에 RIGHT OUTER JOIN 키워드 명시
+--컬럼조건은 ON절에서 조건문 적용
+--오른쪽 기준 요소는 모두 출력이되고 왼쪽 테이블에 컬럼에는 NUll 출력
+select e.employee_id,e.email, d.department_name, d.department_id 
+from employees e  RIGHT OUTER JOIN departments d
+ON e.department_id= d.department_id
+ORDER BY 1;
+
+--ORACLE 문법
+--오른쪽 컬럼(+)
+select employee_id, email,department_name, d.department_id 
+from employees e,departments d
+WHERE e.department_id(+)= d.department_id
+ORDER BY 1;
+
+--ANSI 문법
+--FULL OUTER JOIN
+--두 테이블 사이에 FULL OUTER JOIN 키워드 명시
+--컬럼조건은 ON절에서 조건문 적용
+--양쪽 모두 조인대상이 없는 컬럼에는 NULL 출력
+select e.employee_id,e.email, d.department_name, d.department_id 
+from employees e  FULL OUTER JOIN departments d
+ON e.department_id= d.department_id
+ORDER BY 1;
+
+--ORACLE 문법
+--왼쪽 컬럼(+)
+--union
+--오른쪽 컬럼(+)
+select employee_id, email,department_name, d.department_id 
+from employees e,departments d
+WHERE e.department_id(+)= d.department_id
+union
+select employee_id, email,department_name, d.department_id 
+from employees e,departments d
+WHERE e.department_id= d.department_id(+)
+ORDER BY 1;
+
+--self join
+--하나의 테이블내에 있는 컬럼끼리 연결하는 조인이 필요한 경우 사용
+--조인 대상이 자기자신 하나라는것 빼고 EQUI JOIN과 동일
+--WHERE 절 FK컬럼=PK컬럼
+---------------------------
+select e1.employee_id, e1.first_name, e1.MANAGER_ID,e2.first_name
+from employees e1, employees e2
+where e1.MANAGER_ID=e2.employee_id(+)
+order by 1;
+----------------------
+select e1.employee_id, e1.first_name, e1.MANAGER_ID,e2.first_name
+from employees e1 LEFT OUTER JOIN employees e2
+ON e1.MANAGER_ID=e2.employee_id
+order by 1;
+----------------------------------------------
+--self join + 검색조건
+--------------------------------------------
+
+select e1.employee_id, e1.first_name, e1.MANAGER_ID,e2.first_name
+from employees e1, employees e2
+where e1.MANAGER_ID=e2.employee_id(+)
+AND e1.department_id=100
+order by 1;
+----------------------
+select e1.employee_id, e1.first_name, e1.MANAGER_ID,e2.first_name
+from employees e1 LEFT OUTER JOIN employees e2
+ON e1.MANAGER_ID=e2.employee_id --조인조건
+WHERE e1.department_id=100 --검색조건
+order by 1;
+
+--------------------------------------------------------------------------
+--SUB 쿼리
+--------------------------------------------------------------------------
+--서브쿼리
+--SQL문 안에 포함된 또 다른 SQL문을 의미한다.
+--서브쿼리의 용도는 알려지지 않은 기준을 위한 검색을 위해 사용
+--중첩 반복문으로 생각하면 이해가 쉽울듯합니다.
+
+--유형
+--동작하는 방식이나 반환되는 데이터의 형태에 따라 분류
+--1.동작하는 방식에 따른 분류
+--비연관 서브쿼리 : 서브쿼리가 메인쿼리의 컬럼을 가지고 있지 않은 형태,
+--                메인쿼리에 서브쿼리에서 실행된 결과값을 제공하는 용도
+--연관 서브쿼리  : 서브쿼리가 메인쿼리의 컬럼을 가지고 있는 형태
+--                메인쿼리가 먼저 수행되어 얻은 결과와 서브쿼리의 조건에 맞는지 확인하고자 할 경우 사용
+--2.반환되는 데이터의 형태
+--단일 행 쿼리
+-- 서브쿼리의 결과가 항상 1건 이하의 서브쿼리 
+-- 단일 행 비교 연산자 (=, >, <, >=, <= , !=(<>))
+     SELECT * FROM employees
+     WHERE SALARY >(select salary from employees where employee_id=103);
+     --select salary from employees where employee_id=103;
+     
+--다중 행 쿼리
+-- 서브쿼리의 결과가 2개이상인 서브쿼리
+-- 다중 행 비교 연산자( IN , ALL, ANY 등)사용가능
+--비교대상(100번 부서의 사원들의 급여)
+    select salary FROM employees WHERE department_id=100;
+
+--100번부서의 직원들의 급여들 보다는 더 많이 받는 사원들
+    SELECT * FROM EMPLOYEES
+    WHERE salary >all
+    (select salary FROM employees WHERE department_id=100  );
+--100번부서의 직원들의 급여들 보다는 더 적게 받는 사원들
+    SELECT * FROM EMPLOYEES
+    WHERE salary <all
+    (select salary FROM employees WHERE department_id=100  );    
+    --(12008,9000,8200,7700,7800,6900);--6900보다 작은사원
+--100번부서의 직원중의 최저급여를 받는 사원보다 더 많이 받는 사원들
+    SELECT * FROM EMPLOYEES
+    WHERE salary >any
+    (select salary FROM employees WHERE department_id=100  );
+    --(12008,9000,8200,7700,7800,6900);--6900보다 작은사원 
+--100번부서의 직원중의 최고급여(12008)를 받는 사원보다 더 적게 받는 사원들
+    SELECT * FROM EMPLOYEES
+    WHERE salary <any
+    (select salary FROM employees WHERE department_id=100  );    
+    --(12008,9000,8200,7700,7800,6900);--6900보다 작은사원    
+
+--다중 컬럼 서브쿼리
+-- 서브쿼리의 결과가 여러 컬럼으로 반환되는 서브쿼리
+-- 메인쿼리의 조건절에 여러 컬럼을 동시에 비교할, 
+-- 서브쿼리와 메인쿼리에서 비교하는 컬럼 개수위 위치가 동일
+-- 다중 컬럼의 대상
+
+--pairwise 비교방법
+--다중 컬럼의 값을 동시에 쌍으로 만족하는 경우만 해당...
+select department_id, max(salary) from employees GROUP BY department_id;
+
+--각부서의 최고급여수령자 명단.
+select * from employees
+where (department_id, salary) in (select department_id, max(salary) from employees GROUP BY department_id);
+
+--각부서의 최저급여수령자 명단.
+select * from employees
+where (department_id, salary) in (select department_id, min(salary) from employees GROUP BY department_id);
+
+--unpairwise 다중컬럼 서브쿼리
+--부서별 평균 연봉구하고, 그중에서 평균연봉이 가장 적은 부서의 평균 연봉보다 적게 받는 직원들
+select department_id, avg(salary) from employees GROUP by department_id;
+select * from employees WHERE salary< 3476 ;
+--unpairewise 
+select * from employees
+where department_id in (select department_id  from employees GROUP by department_id)
+and salary <all(select avg(salary)  from employees GROUP by department_id)
+order by employee_id;
+
+
+--부서별로 입사일이 가장 오래된 사원의 명단.
+select * from employees
+where (department_id, hire_date) in 
+(select department_id, min(hire_date) from employees GROUP BY department_id)
+ORDER BY department_id;
+
+select department_id, min(hire_date) from employees GROUP BY department_id;
+--직급별 최고연봉자들..
+select * from employees
+where (job_id, salary) in 
+(select job_id, max(salary) from employees GROUP BY job_id)
+ORDER BY job_id;
+
+
+
+
+
+
+select job_id, max(salary) from employees GROUP BY job_id ORDER BY job_id;
+--Sub Query 작성 시 주의 사항
+--Sub Query 부분은 Where 절에서는 연산자 오른쪽에 위치해야 하며 반드시 괄호로 묶어야 합니다.
+--특별한 경우 (Top-n 분석 등)를 제외하고는 Sub Query 절에 Order by 절이 올 수 없습니다.
+--단일 행 Sub Query 와 다중 행 Sub Query 에 따라 연산자를 잘 선택해야 합니다.
+
+--상호 연관 서브쿼리
+--메인쿼리 서브쿼리 테이블 조건에 맞는 연관관계에 대한 것만출력
+--메인쿼리와 서브쿼리간의 결과를 교환하기 위하여 서브쿼리의 where조건절에서 메인쿼리의 테이블과 연결
+--직원 들 중에서 자신의 부서의 평균연봉과 같거나 많이 받는 사람들의 이름과 직급, 현재 연봉을 출력하세요.
+--주의사항 : 행을 비교할 때마다 결과를 메인으로 반환하는 관계로 처리 성능이 저하될 수 있음
+select * from employees e1
+where salary >= 
+(select avg(salary) from employees e2 WHERE e1.department_id= e2.department_id);
+
+---------------------------------------------------------------------------------------------
+--Scalar Sub Query (스칼라 서브쿼리)
+---------------------------------------------------------------------------------------------
+--select list에서 서브쿼리가 사용될 때 이를 스칼라 서브쿼리하 함.
+--단일 행 결과만 리턴 해야합니다.
+--일치하는 데이터가 없더라도 null값을 리턴합니다.(메인쿼리 기준와 서브쿼리의 left outer join과 동일결과 )
+--그룹함수의 특징중 하나인데 스칼라 서브쿼리 또한 이 특징을 가지고 있다.
+--조인관계로 처리할 수 있는 
+SELECT e.employee_id, email, department_name FROM employees e, departments d
+WHERE e.department_id= d.department_id(+)
+order BY 1;
+
+--스칼라 서브쿼리로 처리할 수 있는 
+SELECT e.employee_id, email, 
+                (select department_name from departments d where d.department_id= e.department_id)
+FROM employees e
+order BY 1;
+
+-----------------------------------------------------------------------------------------------
+--스칼라 서브쿼리의 실행순서
+1. 메인쿼리를 수행한 후 스칼라 서브쿼리에 필요한 값을 제공
+2. 스칼라 서브퀘리를 수행하기 위해 필요한 데이터가 들어있는 블록을 메로리로 로딩
+3. 메인쿼리에서 주어진 조건을 가지고 필요한 값을 검색후 결과를 메모리 입력값과 출력값으로 메모리 내의
+   query execution cache 라는 곳헤 저장.  입력값은 메인쿼리에서 주어진 값이고 출력값은 스칼라 서브 퀄리를 
+   수행 후 나온 결과 값.  이 값을 저장하는 캐쉬 값을 지정하는 파라미터 _query_execution_cache_max_size임.
+4. 다음 조건이 메인쿼리에서 스칼라 서브쿼리로 들어오면 해쉬 함수를 이용해서 해당 값이 캐쉬에 존재하는 지 찾고
+   있으면 즉시 결과 값을 출력하고 없으면 다시 블록을 엑세스 해서 해당 값을 찾은 후 다시 메모리에 캐싱 함.
+5. 메인 쿼리가 끝날 때까지 반복...   
+
+
+
+
